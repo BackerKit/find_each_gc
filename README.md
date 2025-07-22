@@ -1,26 +1,33 @@
 # find_each_gc
 
-A minimal Ruby gem to allow ActiveRecord models to opt into running `GC.start`
-on each batch iteration of `find_each`/`find_in_batches`.
+A minimal Ruby gem that automatically runs `GC.start` on each batch iteration 
+of `find_each`/`find_in_batches` for all ActiveRecord models.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'find_each_gc', path: 'PATH_TO_THIS_GEM'
+gem 'find_each_gc'
 ```
 
 ## Usage
 
-Opt-in for a model by calling:
+Once the gem is installed and required, `GC.start` will automatically be called 
+at the start of each batch when using `find_each` or `find_in_batches` on any 
+ActiveRecord model. No additional configuration is required.
 
 ```ruby
-FindEachGC.enable_for(MyModel)
-```
+# GC.start will be called automatically on each batch
+User.find_each(batch_size: 1000) do |user|
+  # process user
+end
 
-Now, when you use `find_each` or `find_in_batches` on this model, `GC.start`
-will be called at the start of each batch.
+# GC.start will be called automatically on each batch  
+User.find_in_batches(batch_size: 1000) do |batch|
+  # process batch
+end
+```
 
 ## Development
 
